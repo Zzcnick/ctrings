@@ -9,8 +9,10 @@
 // Function Headers
 // =======================================================
 int myStrlen(char *s);
-char* myStrcpy(char *dest, char* src);
-char* myStrcat(char *dest, char* src);
+char* myStrcpy(char *dest, char *src);
+char* myStrncpy(char *dest, char *src, int n);
+char* myStrcat(char *dest, char *src);
+char* myStrncat(char *dest, char *src, int n);
 int myStrcmp(char *s1, char *s2);
 char* myStrchr(char *s, char c);
 
@@ -36,6 +38,17 @@ char* myStrcpy(char *dest, char *src) {
   return dest;
 }
 
+char* myStrncpy(char *dest, char *src, int n) {
+  char *it = dest;
+  while (n) {
+    *it = *src;
+    it++;
+    src++;
+    n--;
+  }
+  return dest;
+}
+
 char* myStrcat(char *dest, char *src) {
   char *it = dest;
   while (*it)
@@ -44,6 +57,20 @@ char* myStrcat(char *dest, char *src) {
     *it = *src;
     it++;
     src++;
+  }
+  *(it++) = 0; // Terminate string
+  return dest;
+}
+
+char* myStrncat(char *dest, char *src, int n) {
+  char *it = dest;
+  while (*it)
+    it++; // Navigate to end of dest string
+  while (n) {
+    *it = *src;
+    it++;
+    src++;
+    n--;
   }
   *(it++) = 0; // Terminate string
   return dest;
@@ -72,7 +99,7 @@ char* myStrchr(char *s, char c) {
 // Testing
 // =======================================================
 int main() {
-  // Several Test Sentences
+  // Several Test Strings
   char phrase1[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   char phrase2[] = "0123456789";
   char phrase3[] = "Everyone is welcome to the CS Dojo";
@@ -81,7 +108,7 @@ int main() {
   char phrase6[] = "abcdefghij";
   printf("Phrase 1: %s\nPhrase 2: %s\nPhrase 3: %s\nPhrase 4: %s\nPhrase 5: %s\nPhrase 6: %s\n",
 	 phrase1, phrase2, phrase3, phrase4, phrase5, phrase6);
-  
+
   // Strlen
   printf("\nTesting strlen:\n");
   printf("C  strlen of phrase 2: %zd\n", strlen(phrase2));
@@ -95,6 +122,21 @@ int main() {
   printf("My strcpy of phrase 5 to phrase 1: %s\n", myStrcpy(phrase1,phrase5));
   printf("C  strcpy of phrase 4 to phrase 1: %s\n", strcpy(phrase1, phrase4));
   printf("My strcpy of phrase 4 to phrase 1: %s\n", myStrcpy(phrase1, phrase4));  
+
+  // Reprint Strings
+  printf("\nPhrase 1: %s\nPhrase 2: %s\nPhrase 3: %s\nPhrase 4: %s\nPhrase 5: %s\nPhrase 6: %s\n",
+	 phrase1, phrase2, phrase3, phrase4, phrase5, phrase6);
+
+  // Strncpy
+  printf("\nTesting strncpy:\n");
+  printf("C  strncpy of phrase 2 to phrase 1 (6 chars): %s\n", strncpy(phrase1,phrase2,6));
+  printf("My strncpy of phrase 5 to phrase 1 (3 chars): %s\n", myStrncpy(phrase1,phrase5,3));
+  printf("C  strncpy of phrase 2 to phrase 1 (11 chars): %s\n", strncpy(phrase1,phrase2,11));
+  printf("My strncpy of phrase 5 to phrase 1 (9 chars): %s\n", myStrncpy(phrase1,phrase5,9));
+
+  // Reprint Strings
+  printf("\nPhrase 1: %s\nPhrase 2: %s\nPhrase 3: %s\nPhrase 4: %s\nPhrase 5: %s\nPhrase 6: %s\n",
+	 phrase1, phrase2, phrase3, phrase4, phrase5, phrase6);
 
   // Strcmp
   printf("\nTesting strcmp:\n");
@@ -118,10 +160,23 @@ int main() {
   printf("\nPhrase 1: %s\n", phrase1);
   // Phrase 1: 01234567890123456789abcdefghijabcdefghij
 
-  // Strcat - Overwriting Some Bytes, Fix Tomorrow
+  // Strcat - Overwriting Some Bytes
   printf("\nTesting strcat:\n");
   printf("C  strcat of phrase 2 to phrase 1: %s\n", strcat(phrase1,phrase2));
   printf("My strcat of phrase 2 to phrase 1: %s\n", myStrcat(phrase1,phrase2));
   printf("C  strcat of phrase 5 to phrase 1: %s\n", strcat(phrase1,phrase5));
   printf("My strcat of phrase 5 to phrase 1: %s\n", myStrcat(phrase1,phrase5));
+ 
+  // Reprint Strings
+  printf("\nPhrase 1: %s\nPhrase 2: %s\nPhrase 3: %s\nPhrase 4: %s\nPhrase 5: %s\nPhrase 6: %s\n",
+	 phrase1, phrase2, phrase3, phrase4, phrase5, phrase6);
+
+  // Strncat - Overwriting Some Bytes (Again)
+  printf("\nTesting strncat:\n");
+  printf("C  strncat of phrase 3 to phrase 2 (5 chars): %s\n", strncat(phrase2,phrase3,5));
+  printf("My strncat of phrase 3 to phrase 2 (5 chars): %s\n", myStrncat(phrase2,phrase3,5));
+  printf("C  strncat of phrase 2 to phrase 2 (3 chars): %s\n", strncat(phrase2,phrase2,3));
+  printf("My strncat of phrase 2 to phrase 2 (3 chars): %s\n", myStrncat(phrase2,phrase2,3));
+ 
+  return 0;
 }
